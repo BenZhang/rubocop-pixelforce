@@ -1,0 +1,134 @@
+require: 
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-pixelforce
+
+AllCops:
+  Exclude:
+    - 'Gemfile'
+    - 'db/**/*'
+    - 'bin/*'
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - development
+    - test
+    - staging
+
+Rails/FilePath:
+  Enabled: false
+
+Pixelforce/ClassStructure:
+  Enabled: true
+  ExpectedOrder:
+    - module_inclusion
+    - constants
+    - attr_macros
+    - association
+    - public_attribute_macros
+    - public_delegate
+    - macros
+    - callbacks
+    - public_class_methods
+    - initializer
+    - public_methods
+    - protected_attribute_macros
+    - protected_methods
+    - private_attribute_macros
+    - private_delegate
+    - private_methods
+  Categories:
+    attr_macros:
+      - attr_accessor
+      - enum
+    association:
+      - belongs_to
+      - has_many
+      - has_one
+    public_attribute_macros:
+      - accepts_nested_attributes_for
+    attribute_macros:
+      - attr_accessor
+      - attr_reader
+      - attr_writer
+    callbacks:
+      - before_create
+      - before_save
+      - before_update
+      - before_validation
+      - before_destroy
+      - before_commit
+      - after_create
+      - after_save
+      - after_update
+      - after_validation
+      - after_destroy
+      - after_commit
+    macros:
+      - validates
+      - validate
+    module_inclusion:
+      - include
+      - prepend
+      - extend
+
+Layout/AlignHash:
+  EnforcedColonStyle: table
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Style/NestedTernaryOperator:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/TernaryParentheses:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
