@@ -31,7 +31,9 @@ module RuboCop
                                     previous: expected_order[previous])
               add_offense(node, message: message)
             end
+            previous = index
 
+            next unless node.respond_to?(:method_name)
             if previous_category && category != previous_category && node.loc.first_line - previous_node_end_line < 2
               add_offense(node, message: "Use empty lines between categories.")
             end
@@ -39,7 +41,6 @@ module RuboCop
             if previous_method_name && previous_method_name == node.method_name && node.loc.first_line - previous_node_end_line > 1
               add_offense(node, message: "Don't Use empty lines between same categories.")
             end
-            previous = index
             previous_category = category
             previous_node_end_line = node.loc.last_line
             previous_method_name = node.method_name
