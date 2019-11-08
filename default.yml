@@ -16,6 +16,9 @@ Rails/UnknownEnv:
     - test
     - staging
 
+Rails/HasManyOrHasOneDependent:
+ Enabled: false
+
 Rails/FilePath:
   Enabled: false
 
