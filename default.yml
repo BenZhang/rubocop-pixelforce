@@ -22,7 +22,7 @@ Rails/HasManyOrHasOneDependent:
 Rails/FilePath:
   Enabled: false
 
-Pixelforce/ClassStructure:
+Layout/ClassStructure: &class_structures
   Enabled: true
   ExpectedOrder:
     - module_inclusion
@@ -75,6 +75,10 @@ Pixelforce/ClassStructure:
       - include
       - prepend
       - extend
+
+Pixelforce/EmptyLineBwteenCategories:
+  <<: *class_structures
+  Enabled: true
 
 Layout/AlignHash:
   EnforcedColonStyle: table
