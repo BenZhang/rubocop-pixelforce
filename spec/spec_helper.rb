@@ -1,3 +1,5 @@
+require 'rubocop'
+require 'rubocop/rspec/support'
 require "bundler/setup"
 require "rubocop/pixelforce"
 
