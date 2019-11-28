@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     rubocop-pixelforce (0.5)
-      rubocop (~> 0.76)
+      rubocop (= 0.76)
       rubocop-performance
       rubocop-rails
 
