@@ -8,6 +8,7 @@ AllCops:
     - 'Gemfile'
     - 'db/**/*'
     - 'bin/*'
+    - 'config/**/*'
 
 Rails/UnknownEnv:
   Environments:
