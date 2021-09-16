@@ -9,6 +9,7 @@ AllCops:
     - 'db/**/*'
     - 'bin/*'
     - 'config/**/*'
+    - 'test/**/*'
 
 Rails/UnknownEnv:
   Environments:
@@ -81,7 +82,7 @@ Pixelforce/EmptyLineBwteenCategories:
   <<: *class_structures
   Enabled: true
 
-Layout/AlignHash:
+Layout/HashAlignment:
   EnforcedColonStyle: table
 
 Metrics/ModuleLength:
