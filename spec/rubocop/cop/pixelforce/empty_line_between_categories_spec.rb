@@ -26,6 +26,22 @@ RSpec.describe RuboCop::Cop::Pixelforce::EmptyLineBetweenCategories, :config do
         belongs_to :category
 
         after_commit :update_geo_location
+
+        def test
+          puts 'test'
+        end
+
+        def test2
+          puts 'test2'
+        end
+
+        def self.test3
+          puts 'test3'
+        end
+
+        def self.test4
+          puts 'test4'
+        end
       end
     RUBY
   end

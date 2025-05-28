@@ -27,6 +27,9 @@ module RuboCop
           previous_category = nil
 
           walk_over_nested_class_definition(class_node) do |node, category|
+            # Skip empty line enforcement for method definitions
+            next if method_definition?(node)
+
             if previous_category && previous_category != category
               count = blank_lines_count_between(prev_node(node), node)
               if count < 2
@@ -56,6 +59,11 @@ module RuboCop
         end
 
         private
+
+        # Check if a node is a method definition
+        def method_definition?(node)
+          node.def_type? || node.defs_type?
+        end
 
         # Classifies a node to match with something in the {expected_order}
         # @param node to be analysed

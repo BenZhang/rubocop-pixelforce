@@ -1,3 +1,13 @@
+# RuboCop Pixelforce Configuration
+# 
+# This configuration requires the following gems to be installed:
+# - rubocop-performance
+# - rubocop-rails
+# 
+# Make sure these are included in your Gemfile:
+# gem 'rubocop-performance', require: false
+# gem 'rubocop-rails', require: false
+
 plugins:
   - rubocop-performance
   - rubocop-rails
@@ -12,19 +22,6 @@ AllCops:
     - 'bin/*'
     - 'config/**/*'
     - 'test/**/*'
-
-Rails/UnknownEnv:
-  Environments:
-    - production
-    - development
-    - test
-    - staging
-
-Rails/HasManyOrHasOneDependent:
-  Enabled: false
-
-Rails/FilePath:
-  Enabled: false
 
 Layout/ClassStructure: &class_structures
   Enabled: true
@@ -142,4 +139,21 @@ Style/GlobalVars:
   Enabled: false
 
 Metrics/ParameterLists:
+  Enabled: false
+
+# Rails cops - these require the rubocop-rails plugin to be installed
+# If you get an error about Rails cops being extracted, make sure you have
+# 'rubocop-rails' gem installed and listed in the plugins section above
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - development
+    - test
+    - staging
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/FilePath:
   Enabled: false

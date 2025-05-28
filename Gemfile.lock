@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    rubocop-pixelforce (2.1.0)
-      rubocop (~> 1.21)
+    rubocop-pixelforce (2.3.0)
+      rubocop (~> 1.75)
       rubocop-performance
       rubocop-rails
 

@@ -1,7 +1,6 @@
 # Rubocop::Pixelforce
 
-Custom Rubocop cop for PixlForce
-
+Custom Rubocop cop for PixelForce
 
 ## Installation
 
@@ -15,14 +14,24 @@ And then execute:
 
     $ bundle
 
-and create .rubocop file like this
+Create a `.rubocop.yml` file in your project root:
 
-```
+```yaml
 inherit_gem:
   rubocop-pixelforce: default.yml
 ```
 
-## Pixelforce/ClassStructure: Don't Use empty lines between same categories.
+### Dependencies
+
+This gem automatically includes the following dependencies:
+- `rubocop-performance` - for performance-related cops
+- `rubocop-rails` - for Rails-specific cops
+
+If you encounter any issues with missing cops, make sure these gems are properly installed.
+
+## Usage
+
+### Pixelforce/EmptyLineBetweenCategories: Don't Use empty lines between same categories.
 
 ```ruby
 # bad
@@ -39,7 +48,7 @@ belongs_to :category
 after_commit :update_geo_location
 ```
 
-## Pixelforce/ClassStructure: Use empty lines between categories.
+### Pixelforce/EmptyLineBetweenCategories: Use empty lines between categories.
 
 ```ruby
 # bad
@@ -57,6 +66,27 @@ belongs_to :category
 after_commit :update_geo_location
 ```
 
+## Troubleshooting
+
+### Error: "Rails cops have been extracted to the rubocop-rails gem"
+
+If you see this error, it means the `rubocop-rails` plugin is not properly loaded. This gem automatically includes `rubocop-rails` as a dependency, but if you're still seeing this error:
+
+1. Make sure you're using the latest version of this gem
+2. Run `bundle update rubocop-pixelforce` to update to the latest version
+3. Ensure your `.rubocop.yml` inherits from this gem's configuration:
+   ```yaml
+   inherit_gem:
+     rubocop-pixelforce: default.yml
+   ```
+
+### Error: "unrecognized cop or department"
+
+If you see errors about unrecognized cops, make sure you have the latest version of RuboCop and this gem installed:
+
+```bash
+bundle update rubocop rubocop-pixelforce
+```
 
 ## Development
 
@@ -66,4 +96,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rubocop-pixelforce.
+Bug reports and pull requests are welcome on GitHub at https://github.com/BenZhang/rubocop-pixelforce.
