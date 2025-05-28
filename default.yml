@@ -1,6 +1,8 @@
-require: 
+plugins:
   - rubocop-performance
   - rubocop-rails
+
+require:
   - rubocop-pixelforce
 
 AllCops:
@@ -19,7 +21,7 @@ Rails/UnknownEnv:
     - staging
 
 Rails/HasManyOrHasOneDependent:
- Enabled: false
+  Enabled: false
 
 Rails/FilePath:
   Enabled: false
@@ -94,10 +96,10 @@ Style/NestedTernaryOperator:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Documentation:
+Style/Documentation:
   Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Enabled: false
 
 Metrics/MethodLength:

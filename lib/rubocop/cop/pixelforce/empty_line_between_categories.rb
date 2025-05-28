@@ -1,7 +1,7 @@
 module RuboCop
   module Cop
     module Pixelforce
-      class EmptyLineBwteenCategories < Cop
+      class EmptyLineBetweenCategories < Base
         include RangeHelp
 
         HUMANIZED_NODE_TYPE = {
@@ -26,6 +26,7 @@ module RuboCop
           previous_method_name = nil
           walk_over_nested_class_definition(class_node) do |node, category|
             next unless node.respond_to?(:method_name)
+
             if previous_category && category != previous_category && node.loc.first_line - previous_node_end_line < 2
               add_offense(node, message: MSG)
             end
@@ -37,7 +38,7 @@ module RuboCop
             previous_node_end_line = node.loc.last_line
             previous_method_name = node.method_name
           end
-        end        
+        end
 
         def autocorrect(node)
           prev_category = prev_node(node)
@@ -221,14 +222,14 @@ module RuboCop
           cop_config['Categories']
         end
 
-        def autocorrect_remove_lines(newline_pos, count)
+        def autocorrect_remove_lines(newline_pos, _count)
           range_to_remove = range_between(newline_pos, newline_pos + 1)
           lambda do |corrector|
             corrector.remove(range_to_remove)
           end
         end
 
-        def autocorrect_insert_lines(newline_pos, count)
+        def autocorrect_insert_lines(newline_pos, _count)
           where_to_insert = range_between(newline_pos, newline_pos + 1)
           lambda do |corrector|
             corrector.insert_after(where_to_insert, "\n")
