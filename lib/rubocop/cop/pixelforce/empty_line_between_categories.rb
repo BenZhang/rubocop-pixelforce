@@ -3,16 +3,19 @@ module RuboCop
     module Pixelforce
       class EmptyLineBetweenCategories < Base
         include RangeHelp
+        extend AutoCorrector
 
         HUMANIZED_NODE_TYPE = {
           casgn: :constants,
           defs: :class_methods,
           def: :public_methods,
-          sclass: :class_singleton
+          sclass: :class_singleton,
+          send: :method_calls
         }.freeze
 
         VISIBILITY_SCOPES = %i[private protected public].freeze
-        MSG = 'Use empty lines between categories.'
+        MSG_EMPTY_LINE_BETWEEN_CATEGORIES = 'Use empty lines between categories.'.freeze
+        MSG_EMPTY_LINE_BETWEEN_SAME_CATEGORIES = "Don't Use empty lines between same categories.".freeze
 
         def_node_matcher :visibility_block?, <<~PATTERN
           (send nil? { :private :protected :public })
@@ -22,36 +25,33 @@ module RuboCop
         # Add offense when find a node out of expected order.
         def on_class(class_node)
           previous_category = nil
-          previous_node_end_line = -1
-          previous_method_name = nil
+
           walk_over_nested_class_definition(class_node) do |node, category|
-            next unless node.respond_to?(:method_name)
-
-            if previous_category && category != previous_category && node.loc.first_line - previous_node_end_line < 2
-              add_offense(node, message: MSG)
+            if previous_category && previous_category != category
+              count = blank_lines_count_between(prev_node(node), node)
+              if count < 2
+                add_offense(node, message: MSG_EMPTY_LINE_BETWEEN_CATEGORIES) do |corrector|
+                  prev_category = prev_node(node)
+                  end_pos = end_position_for(prev_category)
+                  newline_pos = buffer.source.index("\n", end_pos)
+                  where_to_insert = range_between(newline_pos, newline_pos + 1)
+                  corrector.insert_after(where_to_insert, "\n")
+                end
+              end
+            elsif previous_category && previous_category == category
+              count = blank_lines_count_between(prev_node(node), node)
+              if count > 1
+                add_offense(node, message: MSG_EMPTY_LINE_BETWEEN_SAME_CATEGORIES) do |corrector|
+                  prev_category = prev_node(node)
+                  end_pos = end_position_for(prev_category)
+                  newline_pos = buffer.source.index("\n", end_pos)
+                  range_to_remove = range_between(newline_pos, newline_pos + 1)
+                  corrector.remove(range_to_remove)
+                end
+              end
             end
 
-            if previous_method_name && previous_method_name == node.method_name && node.loc.first_line - previous_node_end_line > 1
-              add_offense(node, message: "Don't Use empty lines between same categories.")
-            end
             previous_category = category
-            previous_node_end_line = node.loc.last_line
-            previous_method_name = node.method_name
-          end
-        end
-
-        def autocorrect(node)
-          prev_category = prev_node(node)
-          # finds position of first newline
-          end_pos = end_position_for(prev_category)
-          newline_pos = buffer.source.index("\n", end_pos)
-
-          count = blank_lines_count_between(prev_category, node)
-
-          if count > 1
-            autocorrect_remove_lines(newline_pos, count)
-          else
-            autocorrect_insert_lines(newline_pos, count)
           end
         end
 
@@ -220,20 +220,6 @@ module RuboCop
         # in the {expected_order}.
         def categories
           cop_config['Categories']
-        end
-
-        def autocorrect_remove_lines(newline_pos, _count)
-          range_to_remove = range_between(newline_pos, newline_pos + 1)
-          lambda do |corrector|
-            corrector.remove(range_to_remove)
-          end
-        end
-
-        def autocorrect_insert_lines(newline_pos, _count)
-          where_to_insert = range_between(newline_pos, newline_pos + 1)
-          lambda do |corrector|
-            corrector.insert_after(where_to_insert, "\n")
-          end
         end
       end
     end

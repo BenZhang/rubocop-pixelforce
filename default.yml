@@ -80,7 +80,7 @@ Layout/ClassStructure: &class_structures
       - prepend
       - extend
 
-Pixelforce/EmptyLineBwteenCategories:
+Pixelforce/EmptyLineBetweenCategories:
   <<: *class_structures
   Enabled: true
 

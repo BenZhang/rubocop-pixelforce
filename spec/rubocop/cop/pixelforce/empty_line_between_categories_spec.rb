@@ -1,82 +1,80 @@
 require 'spec_helper'
 require 'yaml'
 
-RSpec.describe RuboCop::Cop::Pixelforce::EmptyLineBwteenCategories do
-  subject(:cop) { described_class.new(config) }
-
+RSpec.describe RuboCop::Cop::Pixelforce::EmptyLineBetweenCategories, :config do
   let(:config) do
-    RuboCop::Config.new(
-      YAML.load_file('default.yml'),
-      '/some/.rubocop.yml'
-    )
+    RuboCop::Config.new(YAML.load_file('default.yml'), '/some/.rubocop.yml')
   end
 
-  it "should have 1 offense" do
-    inspect_source('
+  include RuboCop::RSpec::ExpectOffense
+
+  it 'registers an offense for missing empty line between categories' do
+    expect_offense(<<~RUBY)
       class EmptyLine < ActiveRecord::Base
         belongs_to :user
-
         belongs_to :category
-
         after_commit :update_geo_location
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use empty lines between categories.
       end
-    ')
-    expect(cop.offenses.size).to eq(1)
+    RUBY
   end
 
-  it "should have 0 offense" do
-    inspect_source('
+  it 'does not register an offense when empty lines are correct' do
+    expect_no_offenses(<<~RUBY)
       class EmptyLine < ActiveRecord::Base
         belongs_to :user
         belongs_to :category
 
         after_commit :update_geo_location
       end
-    ')
-    expect(cop.offenses.size).to eq(0)
+    RUBY
   end
 
-  it "should have 5 offense" do
-    inspect_source('
+  it 'registers multiple offenses for multiple missing/extra empty lines' do
+    expect_offense(<<~RUBY)
       class EmptyLine < ActiveRecord::Base
         include EmptyLineLib
         belongs_to :user
+        ^^^^^^^^^^^^^^^^ Use empty lines between categories.
+        belongs_to :category
+        before_create :check_empty_line
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use empty lines between categories.
+        before_create :check_another_empty_line
+        after_commit :update_geo_location
+        enum empty_line: [0, 1]
+        ^^^^^^^^^^^^^^^^^^^^^^^ Use empty lines between categories.
+        attr_accessor :empty_line_attr
+        validates :should_have_empty_line_above
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use empty lines between categories.
+      end
+    RUBY
+  end
+
+  it 'auto-corrects missing/extra empty lines between categories' do
+    expect_offense(<<~RUBY)
+      class EmptyLine < ActiveRecord::Base
+        include EmptyLineLib
+        belongs_to :user
+        ^^^^^^^^^^^^^^^^ Use empty lines between categories.
 
         belongs_to :category
+        ^^^^^^^^^^^^^^^^^^^^ Don't Use empty lines between same categories.
 
         before_create :check_empty_line
 
         before_create :check_another_empty_line
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Don't Use empty lines between same categories.
         after_commit :update_geo_location
         enum empty_line: [0, 1]
+        ^^^^^^^^^^^^^^^^^^^^^^^ Use empty lines between categories.
         attr_accessor :empty_line_attr
         validates :should_have_empty_line_above
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use empty lines between categories.
 
       end
-    ')
-    expect(cop.offenses.size).to eq(5)
-  end
+    RUBY
 
-  it 'should auto correct' do
-    new_source = autocorrect_source('
-      class EmptyLine < ActiveRecord::Base
-        include EmptyLineLib
-        belongs_to :user
-
-        belongs_to :category
-
-        before_create :check_empty_line
-
-        before_create :check_another_empty_line
-        after_commit :update_geo_location
-        enum empty_line: [0, 1]
-        attr_accessor :empty_line_attr
-        validates :should_have_empty_line_above
-
-      end
-    ')
-
-    expect(new_source).to eq('
+    expect_correction(<<~RUBY)
       class EmptyLine < ActiveRecord::Base
         include EmptyLineLib
 
@@ -93,6 +91,6 @@ RSpec.describe RuboCop::Cop::Pixelforce::EmptyLineBwteenCategories do
         validates :should_have_empty_line_above
 
       end
-    ')
+    RUBY
   end
 end
